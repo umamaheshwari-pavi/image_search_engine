@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="Image_search_engine .css">
+  <style>
+  
+</style> 
+</head>
+
+<body>
+
+  <!-- we are using event listener in this so no click functions -->
+
+  <h1>Image Search Engine</h1>
+  
+  <form id="search-form">
+  <input type="text" id="search-box" placeholder="search anything here ......">
+  <button>Search</button>
+</form>
+<div id="search-result"></div>
+
+<p id="no-result-img" style="text-align: center; color: lightgray; display: none;">No results found try a different keyword</p>
+
+<button id="show-more-btn">show more</button>
+
+<div class="progress-bar" id="bar"></div>
+
+<script>
+
+let bar = document.getElementById("bar")
+bar.style.display="none"
+
+const accesskey = "tjwwtPJjKFO2wvCsWqsB3x3j5tgh6khXszg7mgZpMlY";
+
+  const searchForm= document.getElementById("search-form")
+  const searchBox= document.getElementById("search-box")
+  const searchResult= document.getElementById("search-result")
+  const searchMoreButton= document.getElementById("show-more-btn")
+
+  let keyword="";
+  let page=1;
+
+  async function searchImages(){
+
+    
+    // to prevent empty value search
+    keyword=searchBox.value;
+    keyword = searchBox.value.trim();
+
+    if(!keyword){
+      alert("plese enter the value of what you want to search !")
+      bar.style.display="none"
+      return;
+    }
+
+    
+    // progress bar
+    let progress=0;
+    bar.style.display="block"
+    
+   await new Promise((res)=>{
+    const load = setInterval(()=>{
+    if(progress>=100){
+    clearInterval(load);
+    bar.innerText="loaded"
+    res();
+    bar.style.display="none"
+  }
+    else{
+    progress++
+    bar.style.width=progress+"%"
+    bar.innerText=progress+"%"
+    
+  }
+  },20)
+
+   }) 
+    
+
+    const apiurl=`https://api.unsplash.com/search/photos?page=${page}&per_page=12&query=${keyword}&client_id=${accesskey}`;
+
+    const response = await fetch(apiurl);
+    const data = await response.json();
+
+    console.log(data);
+    
+   
+
+    // to display only the searched result and not the previous one
+    if(page===1){
+      searchResult.innerHTML=""
+    }
+    
+    const getImages=data.results;
+
+    //if no images found
+    if (getImages.length === 0) {
+    document.getElementById("no-result-img").style.display = "block";
+    searchMoreButton.style.display = "none";
+    bar.style.display = "none";
+    return;
+      }
+    document.getElementById("no-result-img").style.display = "none";  
+
+    getImages.map((x)=>{
+      const image= document.createElement("img");
+      image.src= x.urls.small;
+      const imageLink =document.createElement("a");
+      imageLink.href=x.links.html;
+      imageLink.target="_blank";
+      imageLink.appendChild(image);
+      searchResult.appendChild(imageLink);
+
+    })
+
+    searchMoreButton.style.display="block"
+  }
+
+  searchForm.addEventListener("submit",(e)=>{
+    e.preventDefault();
+    page=1;
+    searchImages();
+  })
+  searchMoreButton.addEventListener("click",()=>{
+    page++;
+    searchImages();
+
+  })
+  
+
+</script>
+
+</body>
+</html>
