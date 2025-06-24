@@ -4,37 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link rel="stylesheet" href="Image_search_engine .css">
-  <style>
-  
-</style> 
+  <link rel="stylesheet" href="Image_search_engine.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 </head>
 
 <body>
 
-  <!-- we are using event listener in this so no click functions -->
-
-  <h1>Image Search Engine</h1>
+  <div class="container">
+    <br>
+    <br>
+  <h1 class="text-white display-5 " >Image Search Engine</h1>
   
-  <form id="search-form">
-  <input type="text" id="search-box" placeholder="search anything here ......">
-  <button>Search</button>
+<form id="search-form" class="container my-3">
+  <div class="row g-2 align-items-center justify-content-center">
+    <div class="col-8 col-sm-8">
+      <input type="text" id="search-box" placeholder="Search anything here...">
+    </div>
+    <div class="col-12 col-sm-4 text-center">
+      <button class="btn w-100 btn-outline-light mb-2 " type="submit">Search</button>
+    </div>
+  </div>
 </form>
-<div id="search-result"></div>
+
+
+<div id="search-result" class="row justify-content-center gx-4 gy-4"></div>
+
 
 <p id="no-result-img" style="text-align: center; color: lightgray; display: none;">No results found try a different keyword</p>
 
 <button id="show-more-btn">show more</button>
 
 <div class="progress-bar" id="bar"></div>
-
+</div>
 <script>
 
 let bar = document.getElementById("bar")
 bar.style.display="none"
 
-const accesskey = "tjwwtPJjKFO2wvCsWqsB3x3j5tgh6khXszg7mgZpMlY";
-
+  const accesskey = "tjwwtPJjKFO2wvCsWqsB3x3j5tgh6khXszg7mgZpMlY";
   const searchForm= document.getElementById("search-form")
   const searchBox= document.getElementById("search-box")
   const searchResult= document.getElementById("search-result")
@@ -105,16 +114,36 @@ const accesskey = "tjwwtPJjKFO2wvCsWqsB3x3j5tgh6khXszg7mgZpMlY";
       }
     document.getElementById("no-result-img").style.display = "none";  
 
-    getImages.map((x)=>{
-      const image= document.createElement("img");
-      image.src= x.urls.small;
-      const imageLink =document.createElement("a");
-      imageLink.href=x.links.html;
-      imageLink.target="_blank";
-      imageLink.appendChild(image);
-      searchResult.appendChild(imageLink);
+    // getImages.map((x)=>{
+    //   const image= document.createElement("img");
+    //   image.src= x.urls.small;
+    //   const imageLink =document.createElement("a");
+    //   imageLink.href=x.links.html;
+    //   imageLink.target="_blank";
+    //   imageLink.appendChild(image);
+    //   searchResult.appendChild(imageLink);
+  
+    // })
 
-    })
+
+    getImages.map((x) => {
+  const colDiv = document.createElement("div");
+  colDiv.className = "col-12 col-sm-6 col-md-4 col-lg-3"; // 1 on mobile, 2 on sm, 3 on md, 4 on lg+
+
+  const image = document.createElement("img");
+  image.src = x.urls.small;
+  image.className = "img-fluid rounded"; 
+
+  const imageLink = document.createElement("a");
+  imageLink.href = x.links.html;
+  imageLink.target = "_blank";
+  imageLink.className = "d-block"; 
+
+  imageLink.appendChild(image);
+  colDiv.appendChild(imageLink);
+  searchResult.appendChild(colDiv);
+});
+
 
     searchMoreButton.style.display="block"
   }
@@ -135,3 +164,5 @@ const accesskey = "tjwwtPJjKFO2wvCsWqsB3x3j5tgh6khXszg7mgZpMlY";
 
 </body>
 </html>
+
+
